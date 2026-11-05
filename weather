@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# weather - usage: weather [city]   (default: Eldoret)
+
+city="${1:-Eldoret}"
+
+if ! command -v curl >/dev/null; then
+    echo "curl is not installed. Run: sudo apt install curl"
+    exit 1
+fi
+
+# Short one-line forecast, then a compact 3-day view
+curl -s --max-time 8 "wttr.in/${city// /+}?format=%l:+%c+%t+(feels+%f),+%h+humidity,+wind+%w" \
+    || { echo "Could not reach the weather service."; exit 1; }
+echo
+curl -s --max-time 8 "wttr.in/${city// /+}?0nq" | head -n 7
